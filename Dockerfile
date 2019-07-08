@@ -3,7 +3,7 @@
   
   # Install python and pip
   RUN apt-get update
-  RUN apt-get install toilet
+  RUN apt-get -y  install toilet
 
   # Run the application
   CMD ["toilet -F border --gay"]
