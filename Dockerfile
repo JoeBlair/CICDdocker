@@ -1,9 +1,12 @@
-  # Pull base image
-  FROM ubuntu:18.04
-  
-  # Install python and pip
-  RUN apt-get update
-  RUN apt-get -y  install toilet
+#dockerfile
+FROM ubuntu:18.04
 
-  # Run the application
-  CMD ["toilet -F border --gay"]
+# Install Toilet
+RUN apt-get update \
+    && apt-get install -y toilet
+
+# Make sure that the command is executed before any user input
+ENTRYPOINT ["toilet", "-F", "border" ,"--gay"]
+
+# Default text output if nothing is specified
+CMD ["Default Hello World"]

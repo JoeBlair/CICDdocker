@@ -15,13 +15,12 @@ See [TOIlet's website](http://caca.zoy.org/wiki/toilet) for more info.
 Write a build file that:
 
 * takes an ubuntu 18.04
-* instals toilet.
+* installs toilet.
 * makes sure that the commands `toilet -F border --gay` always will be run before any user inputted commands to the container.
 
 Submit your build file.
 
 Build your image, calling it `<yourusername>/toilet`.
-
 Push your newly created image up to dockerhub, and provide the link to it.
 
 Describe what you could do in order to:

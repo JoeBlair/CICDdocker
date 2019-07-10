@@ -1,41 +1,35 @@
 version: '3'
+
 services:
-  wordpress:
-    image: wordpress:latest
-     ports:
-       - "8000:80"
+    db:
+     container_name: wp_db
+     image: mysql:latest
      restart: always
      environment:
-       WORDPRESS_DB_HOST: db:3306
-       WORDPRESS_DB_USER: wordpress
-       WORDPRESS_DB_PASSWORD: wordpress
-       WORDPRESS_DB_NAME: wordpress
+       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+       MYSQL_DATABASE: ${MYSQL_DATABASE}
+       MYSQL_USER: ${MYSQL_USER}
+       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
 
-  db:
-    image: mysql:5.7
-     volumes:
-       - db_data:/var/lib/mysql
+    wordpress:
+     depends_on:
+       - db
+     container_name: wp_wp
+     image: wordpress:latest
      restart: always
      environment:
-       MYSQL_ROOT_PASSWORD: somewordpress
-       MYSQL_DATABASE: wordpress
-       MYSQL_USER: wordpress
-       MYSQL_PASSWORD: wordpress
-
-
-  loadbalancer-nginx:
+       WORDPRESS_DB_HOST: wp_db:3306
+       WORDPRESS_DB_NAME: ${MYSQL_DATABASE}
+       WORDPRESS_DB_USER: ${MYSQL_USER}
+       WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD}
+       WORDPRESS_TABLE_PREFIX: ${WORDPRESS_TABLE_PREFIX}
 
     nginx:
-    image: nginx:latest
-    ports:
-        - '80:80'
-    volumes:
-        - ./nginx:/etc/nginx/conf.d
-        - ./logs/nginx:/var/log/nginx
-        - ./wordpress:/var/www/html
-    links:
-        - wordpress
-    restart: always
-
-networks:
-# define the networks
+     depends_on:
+       - wordpress
+     restart: always
+     build:
+       context: .
+       dockerfile: nginx_df
+     ports:
+       - "80:80"
